@@ -1,61 +1,53 @@
-import React, { Component } from "react";
+import { useState } from "react";
 
-class MyQuotes extends Component {
-  constructor() {
-    super();
+const MyQuotes = () => {
+  const [myQuote, setMyQuote] = useState([]);
+  const [listQuote, setListQuote] = useState("");
 
-    this.displayData = [];
+  const addTodoHandler = (event) => {
+    event.preventDefault();
+    const notIncludesQuote = !myQuote.includes(listQuote);
+    if (notIncludesQuote) {
+      setMyQuote([...myQuote, listQuote]);
+    }
+    setListQuote("");
+  };
 
-    this.state = {
-      showdata: this.displayData,
-      postQuote: "",
-      id: 1,
-    };
-    this.appendData = this.appendData.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-  }
-
-  appendData() {
-    this.displayData.push(
-      <li style={{ marginBottom: "10px" }} key={this.state.id}>
-        {this.state.postQuote}
-      </li>
-    );
-    this.setState({
-      showdata: this.displayData,
-      postQuote: "",
-      id: this.state.id + 1,
-    });
-  }
-
-  handleChange(e) {
-    let getTextQuoteValue = e.target.value;
-    this.setState({
-      postQuote: getTextQuoteValue,
-    });
-  }
-
-  render() {
-    return (
-      <section
+  return (
+    <section style={{ textAlign: "center" }}>
+      <h1
         style={{
-          textAlign: "center",
-          marginTop: "100px",
+          fontSize: "26px",
+          marginBottom: "30px",
+          fontWeight: "bold",
+          borderTop: "1px solid black",
+          paddingTop: "30px",
         }}
       >
-        <h1 style={{ marginBottom: "25px", fontSize: "26px" }}>My Quotes</h1>
+        My Quotes
+      </h1>
+      <form onSubmit={addTodoHandler}>
         <input
           type="text"
-          value={this.state.postQuote}
-          onChange={this.handleChange}
+          placeholder="Quotes"
+          value={listQuote}
+          onChange={(event) => {
+            setListQuote(event.target.value);
+          }}
         />
-        <button type="submit" onClick={this.appendData} value="Append">
-          Submit
-        </button>
-        <ol style={{ marginTop: "25px" }}>{this.displayData}</ol>
-      </section>
-    );
-  }
-}
+        <button type="submit">Submit</button>
+      </form>
+      <ul>
+        {myQuote.map((item) => {
+          return (
+            <li key={item} style={{ marginTop: "10px", marginBottom: "10px" }}>
+              {item}
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  );
+};
 
 export default MyQuotes;
